@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Name - Welcome</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- For icons -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: #333;
+            background-color: #e0f2f1; /* Light teal background */
+            overflow-x: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #009688, #4db6ac); /* Teal gradient */
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        header nav a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        header nav a:hover {
+            color: #ff7043; /* Coral hover */
+        }
+        .hero {
+            background-image: url('img.luffy.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.15); /* Teal overlay */
+        }
+        .hero > div {
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1s ease-out;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .hero p {
+            font-size: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        .carousel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 1;
+        }
+        .carousel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        .carousel img.active {
+            display: block;
+        }
+        .btn {
+            background: linear-gradient(135deg, #ff7043, #ffab91); /* Coral gradient */
+            color: #333;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        section {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .about, .programs, .contact {
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #e0f2f1, #b2dfdb); /* Light teal gradient for sections */
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .about h2, .programs h2, .contact h2 {
+            color: #00695c; /* Deep teal */
+            display: flex;
+            align-items: center;
+        }
+        .about h2::before, .programs h2::before, .contact h2::before {
+            content: '\f005'; /* Star icon */
+            font-family: 'Font Awesome 6 Free';
+            margin-right: 10px;
+            color: #ff7043; /* Coral */
+        }
+        .program-item {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .program-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .program-item h3 {
+            margin-top: 0;
+            color: #004d40; /* Dark teal */
+        }
+        .contact form {
+            display: flex;
+            flex-direction: column;
+        }
+        .contact input, .contact textarea, .contact button {
+            margin-bottom: 1rem;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .contact button {
+            background: linear-gradient(135deg, #ff7043, #ffab91); /* Coral gradient */
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .contact button:hover {
+            background: linear-gradient(135deg, #f4511e, #ff5722);
+        }
+        footer {
+            background: linear-gradient(135deg, #ff7043, #ffab91); /* Coral gradient */
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .hero p {
+                font-size: 1.2rem;
+            }
+            .btn {
+                padding: 12px 24px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ELECRON COLLEG OF ENGINEERING</h1>
+        <nav>
+            <a href="#about"><i class="fas fa-info-circle"></i> About</a> | 
+            <a href="#programs"><i class="fas fa-graduation-cap"></i> Programs</a> | 
+            <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="carousel">
+            <img src="clg.1.jpg" alt="Campus View 1" class="active">
+            <img src="clg.2.jpg" alt="Campus View 2">
+            <img src="clg.3.jpg" alt="Campus View 3">
+        </div>
+        <div>
+            <h1>Welcome to College Name</h1>
+            <p>Empowering minds, shaping futures.</p>
+            <a href="#contact" class="btn">Apply Now</a>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <h2>About Us</h2>
+        <p>College Name is a leading institution dedicated to providing quality education in various fields. Our mission is to foster innovation, critical thinking, and community engagement.</p>
+    </section>
+
+    <section id="programs" class="programs">
+        <h2>Our Programs</h2>
+        <p>Explore our diverse range of undergraduate and graduate programs designed to prepare you for success in today's dynamic world.</p>
+        
+        <div class="program-item">
+            <h3><i class="fas fa-code"></i> Computer Science</h3>
+            <p>Dive into programming, algorithms, and software development. Learn to build innovative tech solutions and prepare for careers in AI, cybersecurity, and more.</p>
+        </div>
+        
+        <div class="program-item">
+            <h3><i class="fas fa-briefcase"></i> Business Administration</h3>
+            <p>Master the fundamentals of management, finance, and entrepreneurship. Gain skills to lead organizations and drive economic growth.</p>
+        </div>
+        
+        <div class="program-item">
+            <h3><i class="fas fa-cogs"></i> Engineering</h3>
+            <p>Specialize in mechanical, electrical, or civil engineering. Hands-on projects and cutting-edge research to solve real-world problems.</p>
+        </div>
+        
+        <div class="program-item">
+            <h3><i class="fas fa-book"></i> Liberal Arts</h3>
+            <p>Broaden your horizons with studies in humanities, social sciences, and arts. Develop critical thinking and communication skills for any career.</p>
+        </div>
+        
+        <div class="program-item">
+            <h3><i class="fas fa-chart-line"></i> Data Science</h3>
+            <p>Analyze big data with statistics and machine learning. Turn data into insights for business, healthcare, and beyond.</p>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <h2>Contact Us</h2>
+        <form id="contactForm">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Your Email" required>
+            <textarea id="message" placeholder="Your Message" rows="5" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+        <p>Email: info@collegename.edu | Phone: (123) 456-7890 | Address: 123 College St, City, State 12345</p>
+    </section>
+
+    <footer>
+        <p>&copy; 2023 College Name. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Carousel functionality
+        let currentImage = 0;
+        const images = document.querySelectorAll('.carousel img');
+        setInterval(() => {
+            images[currentImage].classList.remove('active');
+            currentImage = (currentImage + 1) % images.length;
+            images[currentImage].classList.add('active');
+        }, 3000); // Change image every 3 seconds
+
+        // Fade-in animation on scroll
+        const sections = document.querySelectorAll('section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        });
+        sections.forEach(section => observer.observe(section));
+
+        // Form validation
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+            if (name && email && message) {
+                alert('Thank you for your message! We will get back to you soon.');
+                this.reset();
+            } else {
+                alert('Please fill in all fields.');
+            }
+        });
+    </script>
+</body>
+</html>
